@@ -2,10 +2,11 @@ import numpy as np
 from zfel import sase1d
 
 
-def k_taper(k0=3.5, a=0.5, n=200, split_ix=80, powr=2):
+def k_taper(k0=3.5, a=0.5, n=200, split_ix=80, powr=2, b=0.005, split_ixb=100, powrb=4):
+
     return (
         np.hstack(
-            [np.ones(split_ix), (1 - a * np.linspace(0, 1, n - split_ix) ** powr)]
+            [np.ones(split_ix), (1 - a * np.linspace(0, 1, split_ixb - split_ix) ** powr), (1 - a * np.linspace(0, 1, n - split_ixb) ** powr - b * np.linspace(0, 1, n - split_ixb) ** powrb)]
         )
         * k0
     )

@@ -15,6 +15,9 @@ class Environment(environment.Environment):
             "a": 0.06,
             "split_ix": 80,
             "powr": 2,
+            "b": 0.005,
+            "split_ixb":100,
+            "powrb": 4
         }
         self.observations = {
             "power": None,
@@ -56,6 +59,9 @@ class Environment(environment.Environment):
             "a",
             "split_ix",
             "powr",
+            "b", 
+            "split_ixb",
+            "powrb"
         ]
 
     @staticmethod
@@ -74,12 +80,20 @@ class Environment(environment.Environment):
 
     def _get_vrange(self, var):
         if var == "a":
-            return [0, 0.5]
+            return [0, 0.4]
         elif var == "split_ix":
             n = self.params["n"]
             return [int(0.25 * n), int(0.75 * n)]
         elif var == "powr":
             return [1.9, 2.1]
+        elif var == "b":
+            return [0, 0.2]
+        elif var == "split_ixb":
+            n = self.params["n"]
+            # return [int (0.375 * n), int (0.875 * n) ]
+            return [int (0.5* n), int (n)]
+        elif var == "powrb":
+            return [3.9, 4.1]
 
     def _get_var(self, var):
         x = self.variables[var]
@@ -100,7 +114,9 @@ class Environment(environment.Environment):
             K = k_taper(k0=self.params['k0'], n=int(self.params['n']),
                         a=self.variables['a'],
                         split_ix=int(self.variables['split_ix']),
-                        powr=self.variables['powr'])
+                        powr=self.variables['powr'], b=self.variables['b'],
+                        split_ixb=int(self.variables['split_ixb']), 
+                        powrb=self.variables['powrb'])
             self.z, self.power = taper_output(K, self.DEFAULT_INPUT)
 
             self.modified = False
